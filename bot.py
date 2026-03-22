@@ -1,5 +1,5 @@
 
-from pyrogram import Client, __version__
+from pyrogram import client, __version__
 from info import API_ID, API_HASH, BOT_TOKEN, PORT
 from utils import temp
 from aiohttp import web
@@ -7,7 +7,7 @@ from web.route import web_server
 from config_manager import init_config
 
 
-class Bot(Client):
+class Bot(client):
 
     def __init__(self):
         super().__init__(
