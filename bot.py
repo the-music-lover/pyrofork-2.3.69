@@ -1,14 +1,18 @@
+import asyncio
 
-from pyrogram import client, __version__
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+
+from pyrogram import Client, __version__
 from info import API_ID, API_HASH, BOT_TOKEN, PORT
 from utils import temp
 from aiohttp import web
 from web.route import web_server
 from config_manager import init_config
 
-
-class Bot(client):
-
+class Bot(Client):
     def __init__(self):
         super().__init__(
             name="FileToLinkBot",
@@ -20,9 +24,9 @@ class Bot(client):
             sleep_threshold=5,
         )
 
-    async def start(self):
+    async def start(self, *args, **kwargs):
         init_config()
-        await super().start()
+        await super().start(*args, **kwargs)
         temp.BOT = self
         app = web.AppRunner(await web_server())
         await app.setup()
@@ -32,6 +36,6 @@ class Bot(client):
     async def stop(self, *args):
         await super().stop()
         print("Bot stopped. Bye.")
-    
+
 app = Bot()
 app.run()
